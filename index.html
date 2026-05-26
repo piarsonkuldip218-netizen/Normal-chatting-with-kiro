@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kuldip Singh — Freelance Web Developer & Designer</title>
+  <meta name="description" content="I design and build modern, high-performing websites for ambitious businesses. Next.js, React, custom 3D, and pixel-perfect UI." />
+  <meta name="theme-color" content="#0a0a0b" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Kuldip Singh — Freelance Web Developer" />
+  <meta property="og:description" content="Modern websites for businesses that mean business." />
+  <meta property="og:type" content="website" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Lenis - ultra smooth scroll -->
+  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+
+  <style>
+    /* ============ RESET ============ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    html {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    /* Lenis smooth scroll */
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+    .lenis.lenis-stopped { overflow: hidden; }
+    .lenis.lenis-scrolling iframe { pointer-events: none; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #06070a;
+      color: #f5f4ee;
+      overflow-x: hidden;
+      line-height: 1.5;
+      cursor: none;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button { font: inherit; border: none; background: none; color: inherit; cursor: none; }
+
+    /* ============ TOKENS ============ */
+    :root {
+      --bg: #06070a;
+      --bg-2: #0e0f14;
+      --fg: #f5f4ee;
+      --muted: #8a8a93;
+      --line: rgba(245, 244, 238, 0.09);
+      --line-2: rgba(255, 255, 255, 0.18);
+      --accent: #d4ff3a;
+      --accent-2: #6ee7ff;
+      --accent-3: #ff5e3a;
+      --serif: 'Instrument Serif', 'Times New Roman', serif;
+      --maxw: 1400px;
+      --glass-blur: 18px;
+      --glass-saturate: 130%;
+    }
+    @media (max-width: 760px) {
+      :root { --glass-blur: 10px; --glass-saturate: 110%; }
+    }
+
+    /* ============ AMBIENT BG (gives water-glass something to refract) ============ */
+    body::before {
+      content: '';
+      position: fixed; inset: -10%; z-index: -2;
+      background:
+        radial-gradient(800px 600px at 15% 20%, rgba(110, 231, 255, 0.10), transparent 60%),
+        radial-gradient(900px 700px at 85% 75%, rgba(212, 255, 58, 0.09), transparent 60%),
+        radial-gradient(700px 500px at 50% 100%, rgba(255, 94, 58, 0.08), transparent 60%);
+      filter: blur(20px);
+      pointer-events: none;
+    }
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: -1;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 90px 90px;
+      mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    /* ============ TYPOGRAPHY ============ */
+    .serif { font-family: var(--serif); font-weight: 400; letter-spacing: -0.02em; }
+    h1, h2, h3 { letter-spacing: -0.03em; line-height: 1.02; font-weight: 500; }
+
+    /* ============ WATER GLASS UTILITY ============ */
+    /* Multi-layer technique:
+       1) Frosted background blur + saturate (the "water")
+       2) Dual gradient bg for top-light refraction
+       3) Inset shadows for top inner highlight + bottom subtle dark
+       4) ::before adds a soft bright sheen across the top half
+       5) ::after sweeps a diagonal "shine" on hover (water reflection)
+    */
+    .glass {
+      position: relative;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.025) 50%, rgba(255,255,255,0.06) 100%);
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.22),
+        inset 0 -1px 0 rgba(255,255,255,0.04),
+        inset 0 0 0 1px rgba(255,255,255,0.02),
+        0 12px 40px rgba(0,0,0,0.35);
+      overflow: hidden;
+      transform: translateZ(0);
+      will-change: transform;
+    }
+    .glass::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 55%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 60%, transparent 100%);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+    .glass::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -120%;
+      width: 70%; height: 100%;
+      background: linear-gradient(110deg,
+        transparent 0%,
+        rgba(255,255,255,0.04) 35%,
+        rgba(255,255,255,0.18) 50%,
+        rgba(255,255,255,0.04) 65%,
+        transparent 100%);
+      transform: skewX(-22deg);
+      transition: left 1.1s cubic-bezier(.2,.8,.2,1);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+    .glass:hover::after,
+    .glass.shine::after { left: 140%; }
+
+    /* ============ CUSTOM CURSOR ============ */
+    .cursor-dot, .cursor-ring {
+      position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;
+      border-radius: 50%; transform: translate(-50%, -50%);
+      transition: width .3s cubic-bezier(.2,.8,.2,1.4), height .3s cubic-bezier(.2,.8,.2,1.4), background .3s, border-color .3s;
+      mix-blend-mode: difference;
+    }
+    .cursor-dot { width: 6px; height: 6px; background: var(--fg); }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1px solid var(--fg);
+    }
+    .cursor-ring.hover {
+      width: 70px; height: 70px;
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    @media (max-width: 900px) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none; }
+      a, button { cursor: pointer; }
+    }
+
+    /* ============ SCROLL PROGRESS ============ */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; right: 0; height: 2px;
+      background: transparent; z-index: 999;
+    }
+    .scroll-progress span {
+      display: block; height: 100%; width: 0;
+      background: linear-gradient(90deg, var(--accent-2), var(--accent));
+      box-shadow: 0 0 12px rgba(212,255,58,0.6);
+      transition: width .15s linear;
+    }
+
+    /* ============ PRELOADER ============ */
+    .preloader {
+      position: fixed; inset: 0; background: #06070a; z-index: 10000;
+      display: grid; place-items: center;
+      transition: opacity 1s ease, visibility 1s ease;
+    }
+    .preloader.hidden { opacity: 0; visibility: hidden; }
+    .preloader-counter {
+      font-family: var(--serif); font-size: clamp(80px, 18vw, 220px);
+      line-height: 1; color: var(--fg);
+    }
+    .preloader-bar {
+      position: absolute; bottom: 0; left: 0; height: 2px; width: 0;
+      background: var(--accent); transition: width .2s linear;
+      box-shadow: 0 0 18px rgba(212,255,58,0.7);
+    }
+
+    /* ============ NAV ============ */
+    nav {
+      position: fixed; top: 16px; left: 16px; right: 16px; z-index: 100;
+      padding: 14px 22px 14px 22px; display: flex; align-items: center; justify-content: space-between;
+      border-radius: 100px;
+      transition: transform .5s cubic-bezier(.2,.8,.2,1), top .4s ease, background .4s, border-color .4s;
+    }
+    nav.scrolled {
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.05) 100%);
+      backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+      -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.18),
+        0 10px 40px rgba(0,0,0,0.4);
+    }
+    nav.hidden { transform: translateY(-150%); }
+    .logo {
+      font-family: var(--serif); font-size: 22px; letter-spacing: -0.02em;
+      display: flex; align-items: center; gap: 10px;
+      position: relative; z-index: 1;
+    }
+    .logo-dot {
+      width: 10px; height: 10px; background: var(--accent); border-radius: 50%;
+      box-shadow: 0 0 12px rgba(212,255,58,0.7);
+    }
+    .nav-links { display: flex; gap: 28px; font-size: 14px; font-weight: 400; position: relative; z-index: 1; }
+    .nav-links a { position: relative; padding: 4px 0; opacity: .8; transition: opacity .3s; }
+    .nav-links a:hover { opacity: 1; }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: currentColor; transform: scaleX(0); transform-origin: right;
+      transition: transform .5s cubic-bezier(.7,0,.3,1);
+    }
+    .nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
+    .nav-cta {
+      padding: 10px 18px; border-radius: 100px; background: var(--accent); color: #06070a;
+      font-size: 13px; font-weight: 600;
+      transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .3s;
+      position: relative; z-index: 1;
+      box-shadow: 0 4px 18px rgba(212,255,58,0.25);
+    }
+    .nav-cta:hover { transform: scale(1.05) translateY(-1px); box-shadow: 0 6px 22px rgba(212,255,58,0.45); }
+    @media (max-width: 760px) {
+      nav { padding: 12px 18px; top: 12px; left: 12px; right: 12px; }
+      .nav-links { display: none; }
+    }
+
+    /* ============ LAYOUT ============ */
+    section { padding: 130px 32px; position: relative; }
+    .container { max-width: var(--maxw); margin: 0 auto; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 26px;
+    }
+    .eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--muted); }
+
+    @media (max-width: 760px) {
+      section { padding: 90px 20px; }
+    }
+
+    /* ============ HERO ============ */
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end;
+      padding-bottom: 60px; padding-top: 130px; position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    }
+    .hero-blob {
+      position: absolute; width: 720px; height: 720px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,255,58,0.22), transparent 70%);
+      filter: blur(70px);
+      top: -220px; right: -200px;
+      will-change: transform;
+    }
+    .hero-blob.two {
+      background: radial-gradient(circle, rgba(110,231,255,0.18), transparent 70%);
+      top: auto; right: auto; bottom: -300px; left: -200px;
+      width: 800px; height: 800px;
+    }
+    .hero-blob.three {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(255,94,58,0.12), transparent 70%);
+      top: 30%; left: 40%;
+    }
+    .hero-content { position: relative; z-index: 2; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 9px 18px; border-radius: 100px;
+      font-size: 13px; margin-bottom: 36px;
+    }
+    .pulse {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+      box-shadow: 0 0 0 0 var(--accent), 0 0 12px rgba(212,255,58,0.6);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(212,255,58,0.7), 0 0 12px rgba(212,255,58,0.6); }
+      70% { box-shadow: 0 0 0 14px rgba(212,255,58,0), 0 0 12px rgba(212,255,58,0.6); }
+      100% { box-shadow: 0 0 0 0 rgba(212,255,58,0), 0 0 12px rgba(212,255,58,0.6); }
+    }
+
+    .hero h1 {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(60px, 11vw, 200px);
+      line-height: 0.95; letter-spacing: -0.04em;
+    }
+    .hero h1 .reveal-line { display: block; overflow: hidden; padding: 0.05em 0; }
+    .hero h1 .reveal-inner {
+      display: inline-block;
+      transform: translateY(110%);
+      animation: rise 1.1s cubic-bezier(.2,.8,.2,1) forwards;
+    }
+    .hero h1 .reveal-line:nth-child(2) .reveal-inner { animation-delay: .15s; }
+    .hero h1 .reveal-line:nth-child(3) .reveal-inner { animation-delay: .3s; }
+    @keyframes rise { to { transform: translateY(0); } }
+    .hero h1 em {
+      font-style: italic; color: var(--accent);
+      text-shadow: 0 0 40px rgba(212,255,58,0.25);
+    }
+    .hero-meta {
+      display: flex; justify-content: space-between; align-items: end; gap: 40px;
+      margin-top: 60px; flex-wrap: wrap;
+    }
+    .hero-desc {
+      max-width: 380px; font-size: 16px; color: var(--muted); line-height: 1.6;
+    }
+    .hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 12px;
+      padding: 18px 28px; border-radius: 100px;
+      font-size: 14px; font-weight: 500; letter-spacing: 0.02em;
+      transition: transform .45s cubic-bezier(.2,.8,.2,1), background .3s, color .3s;
+      position: relative; overflow: hidden; white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--accent); color: #06070a;
+      box-shadow: 0 6px 24px rgba(212,255,58,0.25);
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(212,255,58,0.4); }
+    .btn-ghost { background: transparent; color: var(--fg); border-radius: 100px; }
+    .btn-ghost.glass { padding: 18px 28px; }
+    .btn-ghost:hover { transform: translateY(-3px); }
+    .btn .arrow { width: 14px; height: 14px; transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+    .btn:hover .arrow { transform: rotate(-45deg); }
+
+    /* ============ MARQUEE ============ */
+    .marquee {
+      padding: 32px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+      overflow: hidden; white-space: nowrap; position: relative;
+    }
+    .marquee::before, .marquee::after {
+      content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none;
+    }
+    .marquee::before { left: 0; background: linear-gradient(90deg, var(--bg), transparent); }
+    .marquee::after { right: 0; background: linear-gradient(270deg, var(--bg), transparent); }
+    .marquee-track {
+      display: inline-flex; gap: 60px;
+      animation: scroll 35s linear infinite;
+      font-family: var(--serif); font-size: clamp(32px, 5vw, 56px);
+      font-style: italic;
+    }
+    .marquee-track span { display: inline-flex; align-items: center; gap: 60px; }
+    .marquee-track .star { color: var(--accent); font-style: normal; }
+    @keyframes scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ============ ABOUT / STATS ============ */
+    .about { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .about-text h2 {
+      font-family: var(--serif); font-size: clamp(40px, 5vw, 72px);
+      line-height: 1.05; margin-bottom: 32px;
+    }
+    .about-text h2 em { font-style: italic; color: var(--accent); }
+    .about-desc { font-size: 17px; color: var(--muted); line-height: 1.7; max-width: 480px; }
+    .about-desc + .about-desc { margin-top: 20px; }
+
+    .stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    }
+    .stat {
+      padding: 32px 28px; border-radius: 22px;
+      transition: transform .5s cubic-bezier(.2,.8,.2,1);
+    }
+    .stat:hover { transform: translateY(-4px); }
+    .stat-num {
+      font-family: var(--serif); font-size: clamp(48px, 6vw, 80px);
+      line-height: 1; color: var(--fg); margin-bottom: 12px;
+      position: relative; z-index: 1;
+    }
+    .stat-num .plus { color: var(--accent); }
+    .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; position: relative; z-index: 1; }
+    @media (max-width: 900px) {
+      .about { grid-template-columns: 1fr; gap: 48px; }
+    }
+
+    /* ============ SERVICES BENTO ============ */
+    .section-head {
+      display: flex; justify-content: space-between; align-items: end; gap: 40px;
+      margin-bottom: 60px; flex-wrap: wrap;
+    }
+    .section-head h2 {
+      font-family: var(--serif); font-size: clamp(40px, 6vw, 80px);
+      line-height: 1.02; max-width: 800px;
+    }
+    .section-head h2 em { font-style: italic; color: var(--accent); }
+    .section-head p { color: var(--muted); max-width: 320px; font-size: 15px; }
+
+    .bento {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+      grid-auto-rows: minmax(220px, auto);
+    }
+    .bento-card {
+      padding: 32px; border-radius: 24px;
+      transition: transform .55s cubic-bezier(.2,.8,.2,1);
+    }
+    .bento-card:hover { transform: translateY(-6px); }
+    .bento-card.tall { grid-row: span 2; }
+    .bento-card.wide { grid-column: span 2; }
+
+    .bento-icon {
+      width: 50px; height: 50px; border-radius: 14px;
+      background: rgba(212,255,58,0.12);
+      color: var(--accent);
+      display: grid; place-items: center; margin-bottom: 24px;
+      position: relative; z-index: 1;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
+    }
+    .bento-card h3 {
+      font-family: var(--serif); font-size: 28px; font-weight: 400;
+      margin-bottom: 12px; letter-spacing: -0.02em;
+      position: relative; z-index: 1;
+    }
+    .bento-card p { font-size: 15px; color: var(--muted); line-height: 1.6; position: relative; z-index: 1; }
+    .bento-card .num {
+      position: absolute; top: 24px; right: 28px;
+      font-family: var(--serif); font-size: 14px; color: var(--muted); z-index: 1;
+    }
+    .bento-card.feature h3 { font-size: 36px; }
+    .bento-card.feature .bento-icon { background: var(--accent); color: #06070a; }
+    @media (max-width: 900px) {
+      .bento { grid-template-columns: 1fr; }
+      .bento-card.tall, .bento-card.wide { grid-row: auto; grid-column: auto; }
+    }
+
+    /* ============ WORK SHOWCASE ============ */
+    .work-list { display: flex; flex-direction: column; }
+    .work-item {
+      display: grid; grid-template-columns: 80px 1fr auto auto;
+      gap: 32px; align-items: center;
+      padding: 36px 16px; border-top: 1px solid var(--line);
+      position: relative; transition: padding .45s cubic-bezier(.2,.8,.2,1), background .4s;
+      border-radius: 16px;
+    }
+    .work-item:last-child { border-bottom: 1px solid var(--line); }
+    .work-item:hover {
+      padding-left: 40px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.04), transparent);
+    }
+    .work-num { font-family: var(--serif); font-size: 14px; color: var(--muted); }
+    .work-title {
+      font-family: var(--serif); font-size: clamp(32px, 4vw, 56px);
+      font-weight: 400; line-height: 1.05;
+      transition: color .3s;
+    }
+    .work-item:hover .work-title { color: var(--accent); }
+    .work-tag {
+      font-size: 12px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 6px 14px; border: 1px solid var(--line); border-radius: 100px;
+    }
+    .work-arrow {
+      width: 56px; height: 56px; border-radius: 50%;
+      display: grid; place-items: center;
+      transition: background .3s, color .3s, transform .45s cubic-bezier(.2,.8,.2,1);
+    }
+    .work-item:hover .work-arrow {
+      background: var(--accent); color: #06070a; transform: rotate(-45deg);
+      box-shadow: 0 0 20px rgba(212,255,58,0.4);
+    }
+    @media (max-width: 760px) {
+      .work-item { grid-template-columns: 40px 1fr auto; gap: 16px; padding: 26px 0; }
+      .work-tag { display: none; }
+      .work-arrow { width: 40px; height: 40px; }
+      .work-item:hover { padding-left: 16px; }
+    }
+
+    /* ============ PROCESS ============ */
+    .process { background: rgba(255,255,255,0.012); margin: 0 -32px; padding-left: 32px; padding-right: 32px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    @media (max-width: 760px) { .process { margin: 0 -20px; padding-left: 20px; padding-right: 20px; } }
+    .process-steps {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    }
+    .step {
+      padding: 32px 28px; border-radius: 22px;
+      transition: transform .55s cubic-bezier(.2,.8,.2,1);
+    }
+    .step:hover { transform: translateY(-4px); }
+    .step-num {
+      font-family: var(--serif); font-size: 56px; color: var(--accent);
+      line-height: 1; margin-bottom: 24px; position: relative; z-index: 1;
+      text-shadow: 0 0 24px rgba(212,255,58,0.3);
+    }
+    .step h4 { font-family: var(--serif); font-size: 24px; font-weight: 400; margin-bottom: 12px; position: relative; z-index: 1; }
+    .step p { color: var(--muted); font-size: 14px; line-height: 1.6; position: relative; z-index: 1; }
+    @media (max-width: 900px) {
+      .process-steps { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .process-steps { grid-template-columns: 1fr; }
+    }
+
+    /* ============ TECH MARQUEE ============ */
+    .tech-marquee { padding: 60px 0; overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); position: relative; }
+    .tech-marquee::before, .tech-marquee::after {
+      content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none;
+    }
+    .tech-marquee::before { left: 0; background: linear-gradient(90deg, var(--bg), transparent); }
+    .tech-marquee::after { right: 0; background: linear-gradient(270deg, var(--bg), transparent); }
+    .tech-track {
+      display: inline-flex; gap: 80px; align-items: center;
+      animation: scroll 30s linear infinite;
+      white-space: nowrap;
+    }
+    .tech-track span {
+      font-family: var(--serif); font-size: 32px; color: var(--muted);
+      transition: color .3s;
+    }
+    .tech-track:hover span { color: var(--fg); }
+
+    /* ============ FAQ ============ */
+    .faq-list { display: flex; flex-direction: column; gap: 12px; }
+    .faq-item {
+      border-radius: 22px; overflow: hidden;
+      transition: transform .4s cubic-bezier(.2,.8,.2,1);
+    }
+    .faq-item:hover { transform: translateY(-2px); }
+    .faq-q {
+      width: 100%; text-align: left; padding: 28px 28px;
+      display: flex; justify-content: space-between; align-items: center; gap: 32px;
+      font-family: var(--serif); font-size: clamp(20px, 2.4vw, 26px);
+      font-weight: 400; transition: color .3s;
+      position: relative; z-index: 1;
+    }
+    .faq-q:hover { color: var(--accent); }
+    .faq-toggle {
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 1px solid var(--line-2);
+      display: grid; place-items: center; flex-shrink: 0;
+      transition: background .3s, color .3s, transform .45s;
+      background: rgba(255,255,255,0.04);
+    }
+    .faq-item.open .faq-toggle { background: var(--accent); color: #06070a; transform: rotate(45deg); border-color: var(--accent); }
+    .faq-a {
+      max-height: 0; overflow: hidden;
+      transition: max-height .55s cubic-bezier(.2,.8,.2,1);
+      position: relative; z-index: 1;
+    }
+    .faq-a-inner {
+      padding: 0 28px 28px 28px; max-width: 760px;
+      color: var(--muted); font-size: 16px; line-height: 1.7;
+    }
+
+    /* ============ CONTACT ============ */
+    .contact-cta {
+      text-align: center; padding: 150px 32px 110px;
+      position: relative; overflow: hidden;
+    }
+    .contact-cta::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(212,255,58,0.12) 0%, transparent 60%);
+      z-index: 0;
+    }
+    .contact-cta > * { position: relative; z-index: 1; }
+    .contact-cta h2 {
+      font-family: var(--serif); font-size: clamp(56px, 12vw, 180px);
+      line-height: 0.95; letter-spacing: -0.04em;
+      max-width: 1200px; margin: 0 auto 40px;
+    }
+    .contact-cta h2 em {
+      font-style: italic; color: var(--accent);
+      text-shadow: 0 0 50px rgba(212,255,58,0.3);
+    }
+    .contact-cta p { color: var(--muted); max-width: 480px; margin: 0 auto 48px; font-size: 17px; }
+
+    .contact-channels { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+    .channel {
+      display: inline-flex; align-items: center; gap: 12px;
+      padding: 16px 26px; border-radius: 100px;
+      font-size: 14px;
+      transition: transform .35s cubic-bezier(.2,.8,.2,1);
+    }
+    .channel:hover { transform: translateY(-3px); }
+
+    /* ============ FOOTER ============ */
+    footer { padding: 60px 32px 32px; border-top: 1px solid var(--line); position: relative; }
+    .footer-big {
+      font-family: var(--serif); font-size: clamp(80px, 18vw, 280px);
+      line-height: 0.85; letter-spacing: -0.05em; margin-bottom: 80px;
+      background: linear-gradient(180deg, var(--fg) 0%, transparent 95%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .footer-big em { font-style: italic; }
+    .footer-grid {
+      display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px;
+      padding-top: 40px; border-top: 1px solid var(--line); margin-bottom: 60px;
+    }
+    .footer-grid h5 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 16px; font-weight: 500; }
+    .footer-grid ul { list-style: none; }
+    .footer-grid li { margin-bottom: 10px; font-size: 14px; }
+    .footer-grid a { opacity: .8; transition: opacity .3s, color .3s; }
+    .footer-grid a:hover { opacity: 1; color: var(--accent); }
+    .footer-tagline { font-size: 15px; color: var(--muted); max-width: 280px; line-height: 1.6; }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 16px; font-size: 13px; color: var(--muted);
+    }
+    @media (max-width: 760px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ============ REVEAL ON SCROLL ============ */
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 1s cubic-bezier(.2,.8,.2,1), transform 1s cubic-bezier(.2,.8,.2,1);
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* ============ SELECTION ============ */
+    ::selection { background: var(--accent); color: #06070a; }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Custom cursor -->
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
+
+  <!-- Scroll progress bar -->
+  <div class="scroll-progress"><span id="scrollBar"></span></div>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-counter" id="counter">0</div>
+    <div class="preloader-bar" id="bar"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav id="nav">
+    <a href="#" class="logo" data-hover>
+      <span class="logo-dot"></span>
+      Kuldip Singh
+    </a>
+    <div class="nav-links">
+      <a href="#about" data-hover>About</a>
+      <a href="#services" data-hover>Services</a>
+      <a href="#work" data-hover>Work</a>
+      <a href="#faq" data-hover>FAQ</a>
+    </div>
+    <a href="#contact" class="nav-cta" data-hover>Let's Talk &rarr;</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-blob" data-parallax="0.25"></div>
+      <div class="hero-blob two" data-parallax="0.4"></div>
+      <div class="hero-blob three" data-parallax="0.15"></div>
+    </div>
+    <div class="container hero-content">
+      <div class="hero-badge glass">
+        <span class="pulse"></span>
+        <span>Available for projects · 2026</span>
+      </div>
+      <h1>
+        <span class="reveal-line"><span class="reveal-inner">Websites that</span></span>
+        <span class="reveal-line"><span class="reveal-inner"><em>convert</em>, not just</span></span>
+        <span class="reveal-line"><span class="reveal-inner">decorate.</span></span>
+      </h1>
+      <div class="hero-meta">
+        <p class="hero-desc">
+          I'm a freelance web developer designing &amp; building modern, fast, conversion-focused websites for ambitious businesses across India and beyond.
+        </p>
+        <div class="hero-actions">
+          <a href="#work" class="btn btn-primary" data-hover>
+            View Work
+            <svg class="arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11L11 3M11 3H4M11 3V10"/></svg>
+          </a>
+          <a href="#contact" class="btn btn-ghost glass" data-hover>
+            Start a Project
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>Web Design <span class="star">✦</span> Development <span class="star">✦</span> Branding <span class="star">✦</span> Animation <span class="star">✦</span> 3D &amp; WebGL <span class="star">✦</span> SEO <span class="star">✦</span></span>
+      <span>Web Design <span class="star">✦</span> Development <span class="star">✦</span> Branding <span class="star">✦</span> Animation <span class="star">✦</span> 3D &amp; WebGL <span class="star">✦</span> SEO <span class="star">✦</span></span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="eyebrow">About</div>
+      <div class="about">
+        <div class="about-text reveal">
+          <h2>I build digital experiences that <em>businesses are proud</em> to share.</h2>
+          <p class="about-desc">
+            Hi, I'm Kuldip — a self-taught developer obsessed with the craft of building beautiful, functional websites. Over the last few years I've helped clinics, restaurants, and small businesses across India launch a serious online presence.
+          </p>
+          <p class="about-desc">
+            My specialty is turning a brand's idea into a fast, modern, mobile-first website that genuinely brings in customers — not a glorified business card.
+          </p>
+        </div>
+        <div class="stats reveal">
+          <div class="stat glass">
+            <div class="stat-num" data-count="25">0<span class="plus">+</span></div>
+            <div class="stat-label">Projects Delivered</div>
+          </div>
+          <div class="stat glass">
+            <div class="stat-num" data-count="98">0<span class="plus">%</span></div>
+            <div class="stat-label">Client Satisfaction</div>
+          </div>
+          <div class="stat glass">
+            <div class="stat-num" data-count="3">0<span class="plus">+</span></div>
+            <div class="stat-label">Years Experience</div>
+          </div>
+          <div class="stat glass">
+            <div class="stat-num" data-count="100">0<span class="plus">%</span></div>
+            <div class="stat-label">On-Time Delivery</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>What I do, <em>end-to-end.</em></h2>
+        <p>From the first sketch to the final pixel — design, code, deploy, and maintain. One person, full ownership.</p>
+      </div>
+      <div class="bento">
+        <div class="bento-card feature wide glass reveal">
+          <div class="bento-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12 12 3l9 9M5 10v10h14V10"/></svg>
+          </div>
+          <h3>Custom Business Websites</h3>
+          <p>Marketing sites, portfolios, clinic &amp; restaurant websites — designed around your brand, built to convert visitors into customers.</p>
+          <span class="num">01</span>
+        </div>
+
+        <div class="bento-card glass reveal">
+          <div class="bento-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+          </div>
+          <h3>Modern Frontend</h3>
+          <p>Next.js, React, Tailwind. Pixel-perfect, accessible, blazing-fast.</p>
+          <span class="num">02</span>
+        </div>
+
+        <div class="bento-card tall glass reveal">
+          <div class="bento-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+          </div>
+          <h3>Animation &amp; 3D</h3>
+          <p>Framer Motion micro-interactions, scroll storytelling, and React Three Fiber 3D heroes that make visitors stop and look.</p>
+          <span class="num">03</span>
+        </div>
+
+        <div class="bento-card glass reveal">
+          <div class="bento-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/><path d="m9 12 2 2 4-4"/></svg>
+          </div>
+          <h3>SEO &amp; Performance</h3>
+          <p>Lighthouse 95+, semantic markup, structured data, image optimization.</p>
+          <span class="num">04</span>
+        </div>
+
+        <div class="bento-card glass reveal">
+          <div class="bento-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M2 12h20"/></svg>
+          </div>
+          <h3>Domain &amp; Hosting</h3>
+          <p>Custom domain setup, SSL, GitHub Pages or Vercel — handled for you.</p>
+          <span class="num">05</span>
+        </div>
+
+        <div class="bento-card wide glass reveal">
+          <div class="bento-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 6v6l4 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+          </div>
+          <h3>Maintenance &amp; Updates</h3>
+          <p>Need a section added or content changed? I'm a message away. Long-term partnerships beat one-off projects.</p>
+          <span class="num">06</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section id="work">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>Selected <em>Work</em></h2>
+        <p>A glimpse of the businesses I've helped take online — every site live, every client happy.</p>
+      </div>
+      <div class="work-list">
+
+        <a href="#" class="work-item reveal" data-hover>
+          <span class="work-num">01</span>
+          <span class="work-title">SSES Academy</span>
+          <span class="work-tag">Education</span>
+          <span class="work-arrow glass">
+            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11L11 3M11 3H4M11 3V10"/></svg>
+          </span>
+        </a>
+
+        <a href="#" class="work-item reveal" data-hover>
+          <span class="work-num">02</span>
+          <span class="work-title">Dr Sharma Dental</span>
+          <span class="work-tag">Healthcare</span>
+          <span class="work-arrow glass">
+            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11L11 3M11 3H4M11 3V10"/></svg>
+          </span>
+        </a>
+
+        <a href="#" class="work-item reveal" data-hover>
+          <span class="work-num">03</span>
+          <span class="work-title">Cafe Moonshine</span>
+          <span class="work-tag">Restaurant</span>
+          <span class="work-arrow glass">
+            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11L11 3M11 3H4M11 3V10"/></svg>
+          </span>
+        </a>
+
+        <a href="#" class="work-item reveal" data-hover>
+          <span class="work-num">04</span>
+          <span class="work-title">More on request</span>
+          <span class="work-tag">Various</span>
+          <span class="work-arrow glass">
+            <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 11L11 3M11 3H4M11 3V10"/></svg>
+          </span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH MARQUEE -->
+  <div class="tech-marquee">
+    <div class="tech-track">
+      <span>Next.js</span><span>·</span><span>React</span><span>·</span><span>TypeScript</span><span>·</span><span>Tailwind CSS</span><span>·</span><span>Framer Motion</span><span>·</span><span>React Three Fiber</span><span>·</span><span>Node.js</span><span>·</span><span>Figma</span><span>·</span>
+      <span>Next.js</span><span>·</span><span>React</span><span>·</span><span>TypeScript</span><span>·</span><span>Tailwind CSS</span><span>·</span><span>Framer Motion</span><span>·</span><span>React Three Fiber</span><span>·</span><span>Node.js</span><span>·</span><span>Figma</span><span>·</span>
+    </div>
+  </div>
+
+  <!-- PROCESS -->
+  <section class="process">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>How we <em>work together.</em></h2>
+        <p>A simple, transparent four-step process from idea to launch.</p>
+      </div>
+      <div class="process-steps">
+        <div class="step glass reveal">
+          <div class="step-num">01</div>
+          <h4>Discover</h4>
+          <p>Free 30-min call. We talk about your business, customers, and what success looks like.</p>
+        </div>
+        <div class="step glass reveal">
+          <div class="step-num">02</div>
+          <h4>Design</h4>
+          <p>I send you mockups in 3-5 days. Two free revision rounds until you love it.</p>
+        </div>
+        <div class="step glass reveal">
+          <div class="step-num">03</div>
+          <h4>Develop</h4>
+          <p>Modern stack, mobile-first, lightning-fast. You see daily progress on a preview link.</p>
+        </div>
+        <div class="step glass reveal">
+          <div class="step-num">04</div>
+          <h4>Deploy</h4>
+          <p>Launch on your custom domain with SSL. Plus 30 days of free post-launch support.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2>Frequently asked <em>questions.</em></h2>
+        <p>Everything you'd want to know before reaching out. Anything else? Ask me directly.</p>
+      </div>
+      <div class="faq-list reveal">
+
+        <div class="faq-item glass">
+          <button class="faq-q">
+            <span>How much does a website cost?</span>
+            <span class="faq-toggle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1v12M1 7h12"/></svg></span>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">
+            Pricing depends on scope, but most single-page business websites start at around ₹15,000 and full multi-page custom sites range from ₹35,000 to ₹80,000. After the first call I send a fixed quote — no hidden charges.
+          </div></div>
+        </div>
+
+        <div class="faq-item glass">
+          <button class="faq-q">
+            <span>How long does it take?</span>
+            <span class="faq-toggle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1v12M1 7h12"/></svg></span>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">
+            A standard 5-section business site is live in 7-10 days. Bigger projects with custom 3D, animations, or e-commerce typically take 3-5 weeks.
+          </div></div>
+        </div>
+
+        <div class="faq-item glass">
+          <button class="faq-q">
+            <span>Do I get the source code &amp; ownership?</span>
+            <span class="faq-toggle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1v12M1 7h12"/></svg></span>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">
+            Yes — 100%. The domain stays in your account, and I send you a complete source-code backup on Google Drive at handover. You're never locked in.
+          </div></div>
+        </div>
+
+        <div class="faq-item glass">
+          <button class="faq-q">
+            <span>What about hosting &amp; renewal fees?</span>
+            <span class="faq-toggle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1v12M1 7h12"/></svg></span>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">
+            Hosting is FREE forever (GitHub Pages / Vercel). The only recurring cost is your domain — typically ₹599-899 per year, paid directly to your domain provider.
+          </div></div>
+        </div>
+
+        <div class="faq-item glass">
+          <button class="faq-q">
+            <span>Can you redesign my existing website?</span>
+            <span class="faq-toggle"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 1v12M1 7h12"/></svg></span>
+          </button>
+          <div class="faq-a"><div class="faq-a-inner">
+            Absolutely. I can audit your current site for free and tell you exactly what's holding it back — design, speed, SEO, or all three.
+          </div></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact-cta">
+    <div class="eyebrow" style="justify-content:center;">Let's Connect</div>
+    <h2>Got an idea? <br /><em>Let's build it.</em></h2>
+    <p>Replies within a few hours. No agency overhead, no sales pitch — just a real conversation about your project.</p>
+    <div class="contact-channels">
+      <a href="https://wa.me/919999999999" class="channel glass" data-hover target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.7.1-.1.3-.4.5-.6.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.2-.7-1.6-1-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.7.4-.3.3-1 1-1 2.4 0 1.4 1 2.8 1.2 3 .1.2 2 3 4.8 4.2 1.1.5 1.9.7 2.5.8.7.1 1.4.1 1.9-.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.4M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 4.9L2 22l5.2-1.4c1.4.8 3 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2"/></svg>
+        WhatsApp
+      </a>
+      <a href="mailto:hello@kuldipsingh.dev" class="channel glass" data-hover>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+        Email
+      </a>
+      <a href="https://github.com/piarsonkuldip218-netizen" class="channel glass" data-hover target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 8.84 21.5c.5.08.66-.23.66-.5v-1.69c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.1.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.69 0 3.84-2.34 4.69-4.57 4.94.36.31.68.91.68 1.84V21c0 .27.16.59.67.5A10 10 0 0 0 12 2"/></svg>
+        GitHub
+      </a>
+      <a href="#" class="channel glass" data-hover>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM8.34 18.34V9.6H5.67v8.74zM7 8.43a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1m11.34 9.91v-4.79c0-2.55-1.36-3.74-3.18-3.74a2.74 2.74 0 0 0-2.49 1.37V9.6h-2.66c.04.75 0 8.74 0 8.74h2.66v-4.88c0-.24.02-.48.09-.65.19-.48.63-.97 1.36-.97.96 0 1.34.73 1.34 1.8v4.7z"/></svg>
+        LinkedIn
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-big serif">Let's <em>create.</em></div>
+
+    <div class="footer-grid">
+      <div>
+        <p class="footer-tagline">
+          Freelance web developer building modern websites for businesses that mean business.
+        </p>
+      </div>
+      <div>
+        <h5>Navigate</h5>
+        <ul>
+          <li><a href="#about" data-hover>About</a></li>
+          <li><a href="#services" data-hover>Services</a></li>
+          <li><a href="#work" data-hover>Work</a></li>
+          <li><a href="#faq" data-hover>FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Services</h5>
+        <ul>
+          <li><a href="#" data-hover>Business Websites</a></li>
+          <li><a href="#" data-hover>Portfolios</a></li>
+          <li><a href="#" data-hover>SEO Optimization</a></li>
+          <li><a href="#" data-hover>Maintenance</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Connect</h5>
+        <ul>
+          <li><a href="https://wa.me/919999999999" data-hover>WhatsApp</a></li>
+          <li><a href="mailto:hello@kuldipsingh.dev" data-hover>Email</a></li>
+          <li><a href="https://github.com/piarsonkuldip218-netizen" data-hover>GitHub</a></li>
+          <li><a href="#" data-hover>LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 Kuldip Singh. All rights reserved.</span>
+      <span>Crafted with care, in India 🇮🇳</span>
+    </div>
+  </footer>
+
+  <script>
+    // ============ LENIS ULTRA-SMOOTH SCROLL ============
+    let lenis;
+    (function initLenis() {
+      if (typeof Lenis === 'undefined') return;
+      lenis = new Lenis({
+        duration: 1.25,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // exp out, "buttery" feel
+        smoothWheel: true,
+        wheelMultiplier: 1.0,
+        touchMultiplier: 1.6,
+        infinite: false,
+      });
+      function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+      requestAnimationFrame(raf);
+
+      // Anchor smooth scroll handoff
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', (e) => {
+          const id = a.getAttribute('href');
+          if (id.length > 1 && document.querySelector(id)) {
+            e.preventDefault();
+            lenis.scrollTo(id, { offset: -20, duration: 1.4 });
+          }
+        });
+      });
+    })();
+
+    // ============ PRELOADER ============
+    (function preload() {
+      const counter = document.getElementById('counter');
+      const bar = document.getElementById('bar');
+      const preloader = document.getElementById('preloader');
+      let n = 0;
+      if (lenis) lenis.stop();
+      const tick = setInterval(() => {
+        n += Math.floor(Math.random() * 8) + 2;
+        if (n >= 100) { n = 100; clearInterval(tick); }
+        counter.textContent = n;
+        bar.style.width = n + '%';
+        if (n === 100) {
+          setTimeout(() => {
+            preloader.classList.add('hidden');
+            if (lenis) lenis.start();
+          }, 400);
+        }
+      }, 55);
+    })();
+
+    // ============ CUSTOM CURSOR ============
+    (function cursor() {
+      if (window.matchMedia('(max-width: 900px)').matches) return;
+      const dot = document.getElementById('cursorDot');
+      const ring = document.getElementById('cursorRing');
+      let mx = 0, my = 0, rx = 0, ry = 0;
+      window.addEventListener('mousemove', (e) => {
+        mx = e.clientX; my = e.clientY;
+        dot.style.left = mx + 'px';
+        dot.style.top = my + 'px';
+      });
+      function loop() {
+        rx += (mx - rx) * 0.18;
+        ry += (my - ry) * 0.18;
+        ring.style.left = rx + 'px';
+        ring.style.top = ry + 'px';
+        requestAnimationFrame(loop);
+      }
+      loop();
+      document.querySelectorAll('a, button, [data-hover]').forEach(el => {
+        el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+        el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+      });
+    })();
+
+    // ============ NAV + SCROLL PROGRESS ============
+    (function navAndProgress() {
+      const nav = document.getElementById('nav');
+      const bar = document.getElementById('scrollBar');
+      let last = 0;
+      function update(scrollY) {
+        const y = scrollY ?? window.scrollY;
+        if (y > 60) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
+        if (y > last && y > 240) nav.classList.add('hidden'); else nav.classList.remove('hidden');
+        last = y;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = Math.min(100, (y / max) * 100) + '%';
+      }
+      // Hook to lenis if present, fallback to scroll event
+      if (lenis) {
+        lenis.on('scroll', ({ scroll }) => update(scroll));
+      } else {
+        window.addEventListener('scroll', () => update(), { passive: true });
+      }
+    })();
+
+    // ============ HERO BLOB PARALLAX ============
+    (function blobParallax() {
+      const blobs = document.querySelectorAll('[data-parallax]');
+      if (!blobs.length) return;
+      let mx = 0, my = 0, sx = 0, sy = 0, scrollY = 0;
+      window.addEventListener('mousemove', (e) => {
+        mx = (e.clientX / window.innerWidth - 0.5) * 2;
+        my = (e.clientY / window.innerHeight - 0.5) * 2;
+      });
+      function onScroll(y) { scrollY = y; }
+      if (lenis) lenis.on('scroll', ({ scroll }) => onScroll(scroll));
+      else window.addEventListener('scroll', () => onScroll(window.scrollY), { passive: true });
+
+      function tick() {
+        sx += (mx - sx) * 0.06;
+        sy += (my - sy) * 0.06;
+        blobs.forEach(b => {
+          const k = parseFloat(b.dataset.parallax);
+          const tx = sx * 60 * k;
+          const ty = sy * 60 * k - scrollY * k * 0.4;
+          b.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+        });
+        requestAnimationFrame(tick);
+      }
+      tick();
+    })();
+
+    // ============ REVEAL ON SCROLL ============
+    (function reveal() {
+      const els = document.querySelectorAll('.reveal');
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+      els.forEach(el => io.observe(el));
+    })();
+
+    // ============ STAT COUNTERS ============
+    (function counters() {
+      const nums = document.querySelectorAll('[data-count]');
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            const target = parseInt(el.dataset.count, 10);
+            const suffix = el.querySelector('.plus')?.outerHTML || '';
+            let n = 0;
+            const step = Math.max(1, Math.floor(target / 50));
+            const tick = setInterval(() => {
+              n += step;
+              if (n >= target) { n = target; clearInterval(tick); }
+              el.innerHTML = n + suffix;
+            }, 24);
+            io.unobserve(el);
+          }
+        });
+      }, { threshold: 0.5 });
+      nums.forEach(el => io.observe(el));
+    })();
+
+    // ============ FAQ ACCORDION ============
+    (function faq() {
+      document.querySelectorAll('.faq-item').forEach(item => {
+        const q = item.querySelector('.faq-q');
+        const a = item.querySelector('.faq-a');
+        q.addEventListener('click', () => {
+          const open = item.classList.toggle('open');
+          a.style.maxHeight = open ? a.scrollHeight + 'px' : 0;
+        });
+      });
+    })();
+
+    // ============ AUTO SHINE SWEEP (periodic glass shimmer) ============
+    (function autoShine() {
+      const cards = document.querySelectorAll('.bento-card.glass, .stat.glass, .step.glass');
+      if (!cards.length) return;
+      let i = 0;
+      setInterval(() => {
+        const target = cards[i % cards.length];
+        target.classList.add('shine');
+        setTimeout(() => target.classList.remove('shine'), 1200);
+        i++;
+      }, 2200);
+    })();
+  </script>
+</body>
+</html>
